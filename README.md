@@ -9,9 +9,18 @@ https://docs.mesosphere.com/latest/installing/custom/advanced/
 
 ## Pre-requisites
 
-1. Install the latest versions of:
-  * Vagrant + vagrant-hostsupdater & vagrant-vbguest plugins
-  * VirtualBox
+### On OSX
+
+1.
+```
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+brew cask install virtualbox
+brew cask install vagrant
+brew install ansible
+vagrant plugin install vagrant-hostsupdater
+vagrant plugin install vagrant-vbguest
+```
+
 2. Clone this repository locally into a folder where you'll execute it from
 
    `git clone git@gitub.com:aggress/mesosphere-dcos-vagrant-ansible`
