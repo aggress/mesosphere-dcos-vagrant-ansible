@@ -1,0 +1,38 @@
+# mesosphere-dcos-vagrant-ansible
+
+A lightweight Vagrant+Ansible deployment for Mesosphere DC/OS on a laptop
+
+* Creates a local Vagrant cluster of 3 nodes {bootstrap,master,private agent}
+* Uses Ansible to install DC/OS using the recommended Advanced Installer method
+
+https://docs.mesosphere.com/latest/installing/custom/advanced/
+
+## Pre-requisites
+
+1. Install the latest versions of:
+  * Vagrant + vagrant-hostsupdater & vagrant-vbguest plugins
+  * VirtualBox
+2. Clone this repository locally into a folder where you'll execute it from
+
+   `git clone git@gitub.com:aggress/mesosphere-dcos-vagrant-ansible`
+
+3. Download the DC/OS installation file (~800MB) to the project directory.  Mesosphere can provide you the DC/OS Enterprise URL
+   or you can grab the OSS installer `curl -O https://downloads.dcos.io/dcos/stable/dcos_generate_config.sh`
+   
+## Usage
+
+* `cd mesosphere-dcos-vagrant-ansible`
+* Run `vagrant up` to launch and provision, takes ~12 minutes.
+* When complete, access the master UI from http://192.168.33.11
+* To destroy, run `vagrant destroy -f`
+
+## Notes
+
+* Built for DC/OS Enterprise (dcos_generate_config.ee.sh) but can easily be amended for DC/OS OSS
+* You can kill the bootstrap node after the install's completed to free up the resources
+
+## Limitations
+
+* Only tested on CentOS 7
+* Only tested with DC/OS 1.9
+* IPs hard coded
