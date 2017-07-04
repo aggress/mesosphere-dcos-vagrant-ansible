@@ -33,7 +33,7 @@ https://docs.mesosphere.com/latest/installing/custom/advanced/
 
 * `cd mesosphere-dcos-vagrant-ansible`
 * Run `vagrant up` to launch and provision, takes ~12 minutes.
-* When complete, access the master UI from http://192.168.33.11
+* When complete, access the master UI from http://192.168.33.11 and authenticate with a u/p of admin/password
 * To destroy, run `vagrant destroy -f`
 
 ## Notes
