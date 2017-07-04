@@ -26,6 +26,8 @@ https://docs.mesosphere.com/latest/installing/custom/advanced/
    `git clone git@gitub.com:aggress/mesosphere-dcos-vagrant-ansible`
 
 3. Download the DC/OS installation file (~800MB) to the project directory.  Mesosphere can provide you the DC/OS Enterprise URL or you can grab the OSS installer `curl -O https://downloads.dcos.io/dcos/stable/dcos_generate_config.sh`
+
+4. Optional - you can save time by using a base box that's already had the majority of OS updates applied, and the latest virtualbox guest additions added, notes here - https://aggress.github.io/vagrant-custom-box
    
 ## Usage
 
