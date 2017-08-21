@@ -66,12 +66,22 @@
          ExecStart=
          ExecStart=/usr/bin/dockerd --storage-driver=overlay
 
+    - name: Create Docker config directory
+      file:
+        path: /etc/docker
+        state: directory
+
+    - name: Copy the Docker daemon.json
+      template:
+        src: daemon.json.j2
+        dest: /etc/docker/daemon.json
+
     - name: Start Docker service
       systemd:
         state: reloaded
         name: docker
         enabled: yes
-    
+
     - name: set SELinux to permissive
       selinux:
         policy: targeted
@@ -90,13 +100,32 @@
 - hosts: bootstrap
   become: true
   tasks:
+
+    - name: Install repo for Python3
+      yum:
+        name: https://centos7.iuscommunity.org/ius-release.rpm
+        state: present
+
+    - name: Install Python3
+      yum: state=present name={{ item }}
+      with_items:
+      - python36u
+      - jq
+
+    - name: Symlink Python3 binary
+      file:
+        src: /usr/bin/python3.6
+        dest: /usr/bin/python3
+        state: link
+        mode: 0755
+
     - name: Create genconf directory
-      file: 
+      file:
         path: /root/mesosphere/genconf
         state: directory
 
     - name: Symlink in the DC/OS installer
-      file: 
+      file:
         src: /vagrant/dcos_generate_config.ee.sh
         dest: /root/mesosphere/dcos_generate_config.ee.sh
         state: link
@@ -107,7 +136,7 @@
         src: ip-detect.j2
         dest: /root/mesosphere/genconf/ip-detect
         mode: 0755
-    
+
     - name: Copy the config.yaml
       template:
         src: config.yaml.j2
@@ -120,6 +149,9 @@
 
     - name: Launch the bootstrap nginx container
       shell : docker run -d -p 80:80 -v /root/mesosphere/genconf/serve:/usr/share/nginx/html:ro nginx
+
+    - name: Launch the registry container
+      shell : docker run -d -p 5000:5000 --restart=always --name registry registry:2
 
 - hosts: master
   become: true
@@ -172,22 +204,6 @@
         mode: 0644
 
     - name: Run the installer for the public agent
-      shell: bash dcos_install.sh public_slave
+      shell: bash dcos_install.sh slave_public
       args:
         chdir: /root/mesosphere
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
