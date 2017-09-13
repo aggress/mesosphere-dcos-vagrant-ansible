@@ -97,6 +97,11 @@
         path: /root/mesosphere
         state: directory
 
+    - name: Create install directory for
+      file:
+        path: /opt/dcos_install_tmp
+        state: directory
+
     - name: Unarchive the installer
       unarchive:
         src: /vagrant/dcos-install.tar
