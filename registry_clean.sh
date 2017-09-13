@@ -1,3 +1,7 @@
+#!/bin/bash
+
+# Resets Docker registry hosting local universe
+
 docker kill $(docker ps -aq)
 docker rmi -f $(docker images -aq)
 docker rm /registry
