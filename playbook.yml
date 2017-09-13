@@ -97,7 +97,7 @@
         path: /root/mesosphere
         state: directory
 
-    - name: Create install directory for
+    - name: Create install directory for tarball
       file:
         path: /opt/dcos_install_tmp
         state: directory
@@ -134,3 +134,6 @@
 
     - name: Launch the registry container
       shell : docker run -d -p 5000:5000 --restart=always --name registry registry:2
+
+    #- name: Notification
+    #  local_action: osascript -e 'display notification "Your new cluster is ready Sir." with title "Vagrant Build Complete"'

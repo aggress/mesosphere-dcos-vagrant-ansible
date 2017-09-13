@@ -33,7 +33,7 @@ bootstrap node which remains up after installation is completed. It also now hos
 ## Usage
 
 * `cd mesosphere-dcos-vagrant-ansible`
-* Run `vagrant up` to launch and provision, takes ~15 minutes.
+* Run `vagrant up` to launch and provision, takes ~12 minutes.
 * When complete, access the master UI from http://192.168.33.11 and authenticate with a u/p of admin/password
 * To destroy, run `vagrant destroy -f`
 
