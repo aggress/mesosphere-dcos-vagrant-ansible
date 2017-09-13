@@ -3,9 +3,10 @@
 A lightweight Vagrant+Ansible deployment for Mesosphere DC/OS on a laptop
 
 * Creates a local Vagrant cluster of 3 nodes {bootstrap,master,private agent}
-* Uses Ansible to install DC/OS using the recommended Advanced Installer method
-
-https://docs.mesosphere.com/latest/installing/custom/advanced/
+* Uses Ansible to install DC/OS using the recommended [Advanced Installer](https://docs.mesosphere.com/latest/installing/custom/advanced/) method
+* Master branch runs through the full Advanced install using a dedicated
+bootstrap node which remains up after installation is completed. It also now hosts a Docker registry for testing custom Universe packages
+* Local branch skips the bootstrap node and relies on a hand-rolled [dcos-install.tar](https://docs.mesosphere.com/1.10/installing/custom/gui/#backup) which you need to provide in the root folder. This is copied to each VM unarchived and executed. It takes ~12mins compared to ~15mins to install and uses fewer resources
 
 ## Pre-requisites
 
@@ -27,12 +28,12 @@ https://docs.mesosphere.com/latest/installing/custom/advanced/
 
 3. Download the DC/OS installation file (~800MB) to the project directory.  Mesosphere can provide you the DC/OS Enterprise URL or you can grab the OSS installer `curl -O https://downloads.dcos.io/dcos/stable/dcos_generate_config.sh`
 
-4. Optional - you can save time by using a base box that's already had the majority of OS updates applied, and the latest virtualbox guest additions added, notes here - https://aggress.github.io/vagrant-custom-box
-   
+4. Optional - you can save time by using a base box that's already had the majority of OS updates applied, and the latest Virtualbox guest additions added, notes here - https://aggress.github.io/vagrant-custom-box
+
 ## Usage
 
 * `cd mesosphere-dcos-vagrant-ansible`
-* Run `vagrant up` to launch and provision, takes ~12 minutes.
+* Run `vagrant up` to launch and provision, takes ~15 minutes.
 * When complete, access the master UI from http://192.168.33.11 and authenticate with a u/p of admin/password
 * To destroy, run `vagrant destroy -f`
 
@@ -44,5 +45,5 @@ https://docs.mesosphere.com/latest/installing/custom/advanced/
 ## Limitations
 
 * Only tested on CentOS 7
-* Only tested with DC/OS 1.9
+* Tested with DC/OS 1.9x and 1.10
 * IPs hard coded
