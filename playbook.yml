@@ -133,7 +133,7 @@
         chdir: /opt/dcos_install_tmp
 
     - name: Launch the registry container
-      shell : docker run -d -p 5000:5000 --restart=always --name registry registry:2
+      shell : docker run -d -p 10000:5000 --restart=always --name registry registry:2
 
     #- name: Notification
     #  local_action: osascript -e 'display notification "Your new cluster is ready Sir." with title "Vagrant Build Complete"'
