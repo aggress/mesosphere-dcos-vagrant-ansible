@@ -82,12 +82,12 @@
         name: docker
         enabled: yes
 
-    - name: set SELinux to permissive
+    - name: Set SELinux to permissive
       selinux:
         policy: targeted
         state: permissive
 
-    - name: add nogroup requirement
+    - name: Add nogroup requirement
       group:
         name: nogroup
         state: present
@@ -97,113 +97,32 @@
         path: /root/mesosphere
         state: directory
 
-- hosts: bootstrap
-  become: true
-  tasks:
-
-    - name: Install repo for Python3
-      yum:
-        name: https://centos7.iuscommunity.org/ius-release.rpm
-        state: present
-
-    - name: Install Python3
-      yum: state=present name={{ item }}
-      with_items:
-      - python36u
-      - jq
-
-    - name: Symlink Python3 binary
-      file:
-        src: /usr/bin/python3.6
-        dest: /usr/bin/python3
-        state: link
-        mode: 0755
-
-    - name: Create genconf directory
-      file:
-        path: /root/mesosphere/genconf
-        state: directory
-
-    - name: Symlink in the DC/OS installer
-      file:
-        src: /vagrant/dcos_generate_config.ee.sh
-        dest: /root/mesosphere/dcos_generate_config.ee.sh
-        state: link
-        mode: 0755
-
-    - name: Copy the ip-detect script
-      template:
-        src: ip-detect.j2
-        dest: /root/mesosphere/genconf/ip-detect
-        mode: 0755
-
-    - name: Copy the config.yaml
-      template:
-        src: config.yaml.j2
-        dest: /root/mesosphere/genconf/config.yaml
-
-    - name: Run dcos_generate_config.ee.sh to generate the payload
-      shell: /bin/bash dcos_generate_config.ee.sh
-      args:
-        chdir: /root/mesosphere
-
-    - name: Launch the bootstrap nginx container
-      shell : docker run -d -p 80:80 -v /root/mesosphere/genconf/serve:/usr/share/nginx/html:ro nginx
-
-    - name: Launch the registry container
-      shell : docker run -d -p 5000:5000 --restart=always --name registry registry:2
+    - name: Unarchive the installer
+      unarchive:
+        src: /vagrant/dcos-install.tar
+        dest: /opt/dcos_install_tmp
+        remote_src: yes
 
 - hosts: master
   become: true
   tasks:
-    - name: Get the installer from the bootstrap node
-      get_url:
-        url: http://192.168.33.10:80/dcos_install.sh
-        dest: /root/mesosphere/dcos_install.sh
-        mode: 0644
-
     - name: Run the installer for the master
       shell: bash dcos_install.sh master
       args:
-        chdir: /root/mesosphere
-
-    - name: Install the dcos cli
-      get_url:
-        url: https://downloads.dcos.io/binaries/cli/linux/x86-64/dcos-1.9/dcos
-        dest: /usr/local/bin/dcos
-        mode: 0755
-
-    - name: Set dcos cli url
-      shell: /usr/local/bin/dcos config set core.dcos_url http://master.mesos
-
-    - name: dcos auth
-      shell: /usr/local/bin/dcos auth login --username=admin --password=password
+        chdir: /opt/dcos_install_tmp
 
 - hosts: private-agent
   become: true
   tasks:
-    - name: Get the installer from the bootstrap node
-      get_url:
-        url: http://192.168.33.10:80/dcos_install.sh
-        dest: /root/mesosphere/dcos_install.sh
-        mode: 0644
-
-    - name: Run the installer for the private agent
+    - name: Run the installer for the Private Agent
       shell: bash dcos_install.sh slave
       args:
-        chdir: /root/mesosphere
-
+        chdir: /opt/dcos_install_tmp
 
 - hosts: public-agent
   become: true
   tasks:
-    - name: Get the installer from the bootstrap node
-      get_url:
-        url: http://192.168.33.10:80/dcos_install.sh
-        dest: /root/mesosphere/dcos_install.sh
-        mode: 0644
-
-    - name: Run the installer for the public agent
+    - name: Run the installer for the Public Agent
       shell: bash dcos_install.sh slave_public
       args:
-        chdir: /root/mesosphere
+        chdir: /opt/dcos_install_tmp
