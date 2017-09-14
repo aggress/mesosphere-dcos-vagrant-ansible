@@ -93,6 +93,12 @@
         name: nogroup
         state: present
 
+    - name: Adding vagrant user to Docker group
+      user: 
+        name: vagrant
+        groups: docker
+        append: yes
+
     - name: Create mesosphere directory for assets
       file:
         path: /root/mesosphere
@@ -114,6 +120,8 @@
   tasks:
     - name: Run the installer for the master
       shell: bash dcos_install.sh master
+      #async: 600
+      #poll: 0
       args:
         chdir: /opt/dcos_install_tmp
 
@@ -122,6 +130,8 @@
   tasks:
     - name: Run the installer for the Private Agent
       shell: bash dcos_install.sh slave
+      #async: 600
+      #poll: 0
       args:
         chdir: /opt/dcos_install_tmp
 
@@ -130,11 +140,10 @@
   tasks:
     - name: Run the installer for the Public Agent
       shell: bash dcos_install.sh slave_public
+      #async: 600
+      #poll: 0
       args:
         chdir: /opt/dcos_install_tmp
-
-    - name: Launch the registry container
-      shell : docker run -d -p 10000:5000 --restart=always --name registry registry:2
 
     - name: Notification
       become: False
