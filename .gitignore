@@ -1,5 +1,6 @@
 dcos_generate_config*
 dcos-install.tar
-playbook.retry
+ssh-config
+*.retry
 /.vagrant
 *.swp

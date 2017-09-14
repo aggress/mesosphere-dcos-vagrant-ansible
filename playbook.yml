@@ -1,6 +1,7 @@
 ---
 - hosts: all
   become: true
+  gather_facts: False
   tasks:
     - name: Add Docker yum repository
       yum_repository:
@@ -135,5 +136,10 @@
     - name: Launch the registry container
       shell : docker run -d -p 10000:5000 --restart=always --name registry registry:2
 
-    #- name: Notification
-    #  local_action: osascript -e 'display notification "Your new cluster is ready Sir." with title "Vagrant Build Complete"'
+    - name: Notification
+      become: False
+      local_action: shell osascript -e 'display notification "Your new cluster is ready Sir." with title "Vagrant Build Complete" sound name "Ping"'
+
+    - name: SSH config
+      become: False
+      local_action: shell vagrant ssh-config > ssh-config
