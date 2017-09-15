@@ -18,7 +18,7 @@ boxes = [
         :name => "public-agent",
         :eth1 => "192.168.33.13",
         :mem => "1024",
-        :cpu => "2"
+        :cpu => "4"
     },
 ]
 
