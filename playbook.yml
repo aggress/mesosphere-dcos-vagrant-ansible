@@ -120,8 +120,8 @@
   tasks:
     - name: Run the installer for the master
       shell: bash dcos_install.sh master
-      #async: 600
-      #poll: 0
+      async: 600
+      poll: 0
       args:
         chdir: /opt/dcos_install_tmp
 
@@ -130,8 +130,8 @@
   tasks:
     - name: Run the installer for the Private Agent
       shell: bash dcos_install.sh slave
-      #async: 600
-      #poll: 0
+      async: 600
+      poll: 0
       args:
         chdir: /opt/dcos_install_tmp
 
@@ -140,8 +140,8 @@
   tasks:
     - name: Run the installer for the Public Agent
       shell: bash dcos_install.sh slave_public
-      #async: 600
-      #poll: 0
+      async: 600
+      poll: 0
       args:
         chdir: /opt/dcos_install_tmp
 
