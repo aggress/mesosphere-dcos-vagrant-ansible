@@ -148,6 +148,7 @@
     - name: Notification
       become: False
       local_action: shell osascript -e 'display notification "Your new cluster is ready Sir." with title "Vagrant Build Complete" sound name "Ping"'
+      when: ansible_distribution == 'MacOSX'
 
     - name: SSH config
       become: False
