@@ -6,7 +6,8 @@ A lightweight Vagrant+Ansible deployment for Mesosphere DC/OS on a laptop
 * Uses Ansible to install DC/OS using the recommended [Advanced Installer](https://docs.mesosphere.com/latest/installing/custom/advanced/) method
 * Master branch runs through the full Advanced install using a dedicated
 bootstrap node which remains up after installation is completed. It also now hosts a Docker registry for testing custom Universe packages
-* Local branch skips the bootstrap node and relies on a hand-rolled [dcos-install.tar](https://docs.mesosphere.com/1.10/installing/custom/gui/#backup) which you need to provide in the root folder. This is copied to each VM unarchived and executed. It takes ~12mins compared to ~15mins to install and uses fewer resources
+* Local branch skips the bootstrap node and relies on a hand-rolled [dcos-install.tar](https://docs.mesosphere.com/1.10/installing/custom/gui/#backup) which you need to provide in the root folder. This is copied to each VM unarchived and executed and takes ~12mins compared to ~15mins (without async) to install and uses fewer resources
+* Ansible Async reduces install time from ~12 minutes to ~5, note even when the playbook's finished, DC/OS will be finishing the install in the background. A Todo would be to poll back and check the cluster is fully completed. I estimate this would take it to 6m30ms.
 
 ## Pre-requisites
 
